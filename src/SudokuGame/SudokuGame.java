@@ -39,7 +39,7 @@ public SudokuGame() {
 
         int number = initialGrid[row][col];
         if (number != 0) {  // If the number is not zero, display it
-            GraphicsText text = new GraphicsText(String.valueOf(number), x + BOX_DIM / 2, y + BOX_DIM / 2);
+            GraphicsText text = new GraphicsText(String.valueOf(number));
             text.setCenter(x + BOX_DIM / 2, y + BOX_DIM / 2);
             canvas.add(text);
         }
