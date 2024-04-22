@@ -11,10 +11,19 @@ public class Guess {
 
     public Guess() {
         guessField = new TextField();
+        guessField.setCenter(200, 700);
 
         submitGuessButton = new Button("Guess!");
         // submitGuessButton.onClick( () -> addGuess());
     }
+
+    public void addGuess() {
+        int guessText = Integer.valueOf(guessField.getText()); 
+        // if (0 < guessText <= 9) {
+
+    
+    }
+    
 
     
 
