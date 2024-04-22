@@ -19,13 +19,11 @@ public class Guess {
 
     public void addGuess() {
         int guessText = Integer.valueOf(guessField.getText()); 
-        // if (0 < guessText <= 9) {
+        if (0 < guessText && guessText <= 9) {
+
+    
+        }
+    
 
     
     }
-    
-
-    
-
-    
-}
