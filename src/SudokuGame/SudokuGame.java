@@ -53,11 +53,20 @@ public SudokuGame() {
     showAnswer = new Button("Show Answer"); 
     showAnswer.setCenter(500, 600);
     canvas.add(showAnswer);
-    showAnswer.onClick( () -> showAnswerOnGrid(correctGrid));
+    showAnswer.onClick( () -> {
+        canvas.removeAll();
+        createInitialGird();
+        showAnswerOnGrid(correctGrid);
+        canvas.add(guess.getGuessField());
+        canvas.add(guess.getSubmitGuessButton()); 
+        canvas.add(showAnswer);
+        canvas.add(hideAnswer);
+    });
 
     hideAnswer = new Button("Hide Answer");
     hideAnswer.setCenter(500, 700);
     canvas.add(hideAnswer);
+    
     hideAnswer.onClick( () ->  {
         canvas.removeAll();
          createInitialGird();
