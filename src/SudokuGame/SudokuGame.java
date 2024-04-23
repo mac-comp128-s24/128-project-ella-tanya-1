@@ -4,7 +4,6 @@ import edu.macalester.graphics.CanvasWindow;
 import edu.macalester.graphics.GraphicsText;
 import edu.macalester.graphics.Rectangle;
 import edu.macalester.graphics.ui.Button;
-import edu.macalester.graphics.ui.TextField;
 
 import java.awt.Color;
 
@@ -14,11 +13,10 @@ public class SudokuGame {
     private static final int BOX_DIM = 50; 
     private CanvasWindow canvas;  
     private Button showAnswer; 
+    private Button hideAnswer; 
     private int selectedRow = -1; 
     private int selectedCol = -1; 
     private Guess guess; 
-    // private TextField numField; 
-    // private GraphicsText numLabel; 
 
     int[][] initialGrid = {
         {9, 6, 2, 7, 0, 0, 0, 5, 0},
@@ -56,6 +54,17 @@ public SudokuGame() {
     showAnswer.setCenter(500, 600);
     canvas.add(showAnswer);
     showAnswer.onClick( () -> showAnswerOnGrid(correctGrid));
+
+    hideAnswer = new Button("Hide Answer");
+    hideAnswer.setCenter(500, 700);
+    canvas.add(hideAnswer);
+    hideAnswer.onClick( () ->  {
+        canvas.removeAll();
+         createInitialGird();
+         canvas.add(guess.getGuessField());
+         canvas.add(guess.getSubmitGuessButton()); 
+         canvas.add(showAnswer);
+         canvas.add(hideAnswer);});
 
     canvas.onClick(event -> {
         int x = (int) event.getPosition().getX();
@@ -136,15 +145,6 @@ public SudokuGame() {
         }
     }
 
-    // Back up: if we can't figure out clicks on screen, we can use text fields to get the number, x and y 
-    // numLabel = new GraphicsText("Enter number: "); 
-    // numLabel.setCenter(100, 580); 
-    // canvas.add(numLabel); 
-
-    // numField = new TextField(); 
-    // numField.setCenter(100, 600);
-    // canvas.add(numField);
-
     public void showAnswerOnGrid(int [][] correctGrid) {
         for (int i = 0; i < 81; i++) {
             int row = i / 9; // Calculate row index
@@ -164,8 +164,6 @@ public SudokuGame() {
         } 
         canvas.draw();
     }
-
-
 
    public static void main(String[] args) {
     new SudokuGame();
