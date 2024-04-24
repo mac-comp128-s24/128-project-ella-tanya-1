@@ -17,7 +17,10 @@ public class Guess {
 
         submitGuessButton = new Button("Guess!");
         submitGuessButton.setCenter(200, 650);
-        submitGuessButton.onClick( () -> addGuess());
+        submitGuessButton.onClick( () -> {
+            addGuess();
+            guessField.setText("");
+        });
     }
 
     public Button getSubmitGuessButton() {
