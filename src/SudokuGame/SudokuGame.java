@@ -8,7 +8,7 @@ import edu.macalester.graphics.ui.Button;
 import java.awt.Color;
 
 public class SudokuGame {
-    private static final int CANVAS_WIDTH = 1000;
+    private static final int CANVAS_WIDTH = 450;
     private static final int CANVAS_HEIGHT = 1000;
     private static final int BOX_DIM = 50; 
     private CanvasWindow canvas;  
@@ -42,6 +42,18 @@ public class SudokuGame {
         {3, 5, 7, 1, 6, 4, 9, 2, 8}
     };
 
+    public int[][] guessGrid = {
+        {9, 6, 2, 7, 0, 0, 0, 5, 0},
+        {7, 0, 0, 4, 5, 6, 0, 0, 9},
+        {8, 4, 0, 2, 0, 0, 3, 0, 0},
+        {5, 2, 0, 0, 0, 1, 0, 7, 0},
+        {0, 0, 4, 0, 3, 0, 8, 0, 5},
+        {0, 0, 0, 0, 7, 5, 1, 0, 0},
+        {0, 0, 6, 5, 9, 0, 0, 3, 4},
+        {4, 9, 8, 0, 0, 7, 0, 0, 0},
+        {0, 5, 0, 1, 0, 4, 0, 2, 0}
+    };
+
 public SudokuGame() {
     canvas = new CanvasWindow("Sudoku!", CANVAS_WIDTH, CANVAS_HEIGHT);
     canvas.setBackground(Color.WHITE);
@@ -51,11 +63,11 @@ public SudokuGame() {
     canvas.add(guess.getSubmitGuessButton()); 
 
     showAnswer = new Button("Show Answer"); 
-    showAnswer.setCenter(500, 600);
+    showAnswer.setCenter(300, 600);
     canvas.add(showAnswer);
     showAnswer.onClick( () -> {
         canvas.removeAll();
-        createInitialGird();
+        createGrid(correctGrid);
         showAnswerOnGrid(correctGrid);
         canvas.add(guess.getGuessField());
         canvas.add(guess.getSubmitGuessButton()); 
@@ -64,16 +76,17 @@ public SudokuGame() {
     });
 
     hideAnswer = new Button("Hide Answer");
-    hideAnswer.setCenter(500, 700);
+    hideAnswer.setCenter(300, 700);
     canvas.add(hideAnswer);
     
     hideAnswer.onClick( () ->  {
         canvas.removeAll();
-         createInitialGird();
+        createGrid(guessGrid);
          canvas.add(guess.getGuessField());
          canvas.add(guess.getSubmitGuessButton()); 
          canvas.add(showAnswer);
-         canvas.add(hideAnswer);});
+         canvas.add(hideAnswer);
+    });
 
     canvas.onClick(event -> {
         int x = (int) event.getPosition().getX();
@@ -85,7 +98,7 @@ public SudokuGame() {
         }
     });
 
-        createInitialGird();
+    createGrid(guessGrid);
 
     }
 
@@ -97,21 +110,38 @@ public SudokuGame() {
         return selectedCol; 
     }
 
-    public void createInitialGird() {
+    // boolean lastWrong = false; 
+    public void createGrid(int[][] grid) {
         for (int i = 0; i < 81; i++) {
             int row = i / 9; // Calculate row index
             int col = i % 9; // Calculate column index
             int x = col * BOX_DIM;
             int y = row * BOX_DIM;
-    
+
+            // GraphicsText wrong = new GraphicsText("Inserted guess was wrong!"); 
+            
             Rectangle box = new Rectangle(x, y, BOX_DIM, BOX_DIM);
             canvas.add(box);
     
-            int number = initialGrid[row][col];
-            if (number != 0) {  // If the number is not zero, display it
+            int number = grid[row][col];
+            if (number != 0) { // If the number is not zero, display it
                 GraphicsText text = new GraphicsText(String.valueOf(number));
-                text.setCenter(x + BOX_DIM / 2, y + BOX_DIM / 2);
+                text.setCenter(x + BOX_DIM / 2, y + BOX_DIM / 2); 
                 canvas.add(text);
+                if (grid[row][col] == (initialGrid[row][col])) {
+                    text.setStrokeWidth(2); 
+                    // lastWrong = false; 
+                } else {
+                    if (guessGrid[row][col] != 0&& guessGrid[row][col] != correctGrid[row][col]) {
+                        guessGrid[row][col] = 0;
+                        createGrid(guessGrid);
+                        // wrong.setCenter(225, 500);
+                        // wrong.setFillColor(Color.RED);
+                        // canvas.add(wrong);
+                        canvas.remove(text);
+                        // lastWrong = true; 
+                    } 
+                }
             }
         } 
         canvas.draw();
@@ -124,7 +154,10 @@ public SudokuGame() {
             int y = row * BOX_DIM;
             GraphicsText guessText = new GraphicsText(String.valueOf(guess), x + BOX_DIM / 2, y + BOX_DIM / 2);
             guessText.setCenter(x + BOX_DIM / 2, y + BOX_DIM / 2);
-            canvas.add(guessText);
+            // canvas.add(guessText);
+            guessGrid[row][col] = guess; 
+            createGrid(guessGrid);
+            // canvas.add(guessGrid);
             canvas.draw();
         } else {
             System.out.println("No cell selected.");
@@ -165,7 +198,7 @@ public SudokuGame() {
             canvas.add(box);
 
             int number = correctGrid[row][col];
-            if (number != 0) {  // If the number is not zero, display it
+            if (number != 0 || number > 9) {  // If the number is not zero, display it
                 GraphicsText text = new GraphicsText(String.valueOf(number));
                 text.setCenter(x + BOX_DIM / 2, y + BOX_DIM / 2);
                 canvas.add(text);
