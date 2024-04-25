@@ -12,6 +12,7 @@ public class SudokuGame {
     private static final int CANVAS_HEIGHT = 1000;
     private static final int BOX_DIM = 50; 
     private CanvasWindow canvas;  
+    private GraphicsText sudokuGame; 
     private Button showAnswer; 
     private Button hideAnswer; 
     private int selectedRow = -1; 
@@ -58,12 +59,18 @@ public SudokuGame() {
     canvas = new CanvasWindow("Sudoku!", CANVAS_WIDTH, CANVAS_HEIGHT);
     canvas.setBackground(Color.WHITE);
 
+    sudokuGame = new GraphicsText("Sudoku!"); 
+    sudokuGame.setStrokeWidth(1.5); 
+    sudokuGame.setFontSize(30);
+    sudokuGame.setCenter(225, 500);
+    canvas.add(sudokuGame);
+
     guess = new Guess(this);
     canvas.add(guess.getGuessField());
     canvas.add(guess.getSubmitGuessButton()); 
 
     showAnswer = new Button("Show Answer"); 
-    showAnswer.setCenter(300, 600);
+    showAnswer.setCenter(225, 600);
     canvas.add(showAnswer);
     showAnswer.onClick( () -> {
         canvas.removeAll();
@@ -76,7 +83,7 @@ public SudokuGame() {
     });
 
     hideAnswer = new Button("Hide Answer");
-    hideAnswer.setCenter(300, 700);
+    hideAnswer.setCenter(225, 650);
     canvas.add(hideAnswer);
     
     hideAnswer.onClick( () ->  {

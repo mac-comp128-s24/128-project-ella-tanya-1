@@ -13,10 +13,10 @@ public class Guess {
     public Guess(SudokuGame game) {
         this.game = game; 
         guessField = new TextField();
-        guessField.setCenter(200, 700);
+        guessField.setCenter(170, 550);
 
         submitGuessButton = new Button("Guess!");
-        submitGuessButton.setCenter(200, 650);
+        submitGuessButton.setCenter(280, 550);
         submitGuessButton.onClick( () -> {
             addGuess();
             guessField.setText("");
