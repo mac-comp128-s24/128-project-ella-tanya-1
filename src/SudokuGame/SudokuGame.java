@@ -1,6 +1,7 @@
 package SudokuGame;
 
 import edu.macalester.graphics.CanvasWindow;
+import edu.macalester.graphics.FontStyle;
 import edu.macalester.graphics.GraphicsText;
 import edu.macalester.graphics.Rectangle;
 import edu.macalester.graphics.ui.Button;
@@ -60,9 +61,12 @@ public SudokuGame() {
     canvas.setBackground(Color.WHITE);
 
     sudokuGame = new GraphicsText("Sudoku!"); 
-    sudokuGame.setStrokeWidth(1.5); 
+   // sudokuGame.setStrokeWidth(1.5); 
     sudokuGame.setFontSize(30);
     sudokuGame.setCenter(225, 500);
+    sudokuGame.setFillColor(Color.decode("#6A0E3C"));
+    sudokuGame.setFont("monospaced", FontStyle.BOLD, 25);
+    sudokuGame.setFilled(true);
     canvas.add(sudokuGame);
 
     guess = new Guess(this);
@@ -128,6 +132,10 @@ public SudokuGame() {
             int y = row * BOX_DIM*3;
             Rectangle bigBox = new Rectangle(x, y, BOX_DIM*3, BOX_DIM*3);
             bigBox.setStrokeWidth(2);
+            bigBox.setStrokeColor(Color.decode("#A52A67"));
+            bigBox.setStroked(true);
+            bigBox.setFillColor(Color.decode("#FDD5DF"));
+            bigBox.setFilled(true);
             canvas.add(bigBox); 
         }
     }
@@ -140,15 +148,19 @@ public SudokuGame() {
             int y = row * BOX_DIM;
             
             Rectangle box = new Rectangle(x, y, BOX_DIM, BOX_DIM);
+            box.setStrokeColor(Color.decode("#A52A67"));
+            box.setStroked(true);
             canvas.add(box);
     
             int number = grid[row][col];
             if (number != 0) { // If the number is not zero, display it
                 GraphicsText text = new GraphicsText(String.valueOf(number));
                 text.setCenter(x + BOX_DIM / 2, y + BOX_DIM / 2); 
+               text.setFilled(true);
+               text.setFillColor(Color.decode("#6A0E3C"));
                 canvas.add(text);
                 if (grid[row][col] == (initialGrid[row][col])) {
-                    text.setStrokeWidth(2); 
+                    text.setFont("monospaced", FontStyle.BOLD, 14);
                 } else {
                     if (guessGrid[row][col] != 0&& guessGrid[row][col] != correctGrid[row][col]) {
                         guessGrid[row][col] = 0;
@@ -161,12 +173,12 @@ public SudokuGame() {
         canvas.draw();
     }
 
-
     public void updateGridWithGuess(int guess, int row, int col) {
         if (row >= 0 && col >= 0) {
             int x = col * BOX_DIM;
             int y = row * BOX_DIM;
             GraphicsText guessText = new GraphicsText(String.valueOf(guess), x + BOX_DIM / 2, y + BOX_DIM / 2);
+            guessText.setFont("monospaced", FontStyle.PLAIN, 14);
             guessText.setCenter(x + BOX_DIM / 2, y + BOX_DIM / 2);
             guessGrid[row][col] = guess; 
             createGrid(guessGrid);
