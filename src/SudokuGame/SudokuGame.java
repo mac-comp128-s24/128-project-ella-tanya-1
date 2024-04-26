@@ -74,6 +74,7 @@ public SudokuGame() {
     canvas.add(showAnswer);
     showAnswer.onClick( () -> {
         canvas.removeAll();
+        createBigGrid();
         createGrid(correctGrid);
         showAnswerOnGrid(correctGrid);
         canvas.add(guess.getGuessField());
@@ -88,6 +89,7 @@ public SudokuGame() {
     
     hideAnswer.onClick( () ->  {
         canvas.removeAll();
+        createBigGrid();
         createGrid(guessGrid);
          canvas.add(guess.getGuessField());
          canvas.add(guess.getSubmitGuessButton()); 
@@ -105,6 +107,7 @@ public SudokuGame() {
         }
     });
 
+    createBigGrid();
     createGrid(guessGrid);
 
     }
@@ -117,15 +120,24 @@ public SudokuGame() {
         return selectedCol; 
     }
 
-    // boolean lastWrong = false; 
+    public void createBigGrid() {
+        for (int i = 0; i < 9; i++) {
+            int row = i / 3; // Calculate row index
+            int col = i % 3; // Calculate column index
+            int x = col * BOX_DIM*3;
+            int y = row * BOX_DIM*3;
+            Rectangle bigBox = new Rectangle(x, y, BOX_DIM*3, BOX_DIM*3);
+            bigBox.setStrokeWidth(2);
+            canvas.add(bigBox); 
+        }
+    }
+
     public void createGrid(int[][] grid) {
         for (int i = 0; i < 81; i++) {
             int row = i / 9; // Calculate row index
             int col = i % 9; // Calculate column index
             int x = col * BOX_DIM;
             int y = row * BOX_DIM;
-
-            // GraphicsText wrong = new GraphicsText("Inserted guess was wrong!"); 
             
             Rectangle box = new Rectangle(x, y, BOX_DIM, BOX_DIM);
             canvas.add(box);
@@ -137,23 +149,18 @@ public SudokuGame() {
                 canvas.add(text);
                 if (grid[row][col] == (initialGrid[row][col])) {
                     text.setStrokeWidth(2); 
-                    // lastWrong = false; 
                 } else {
                     if (guessGrid[row][col] != 0&& guessGrid[row][col] != correctGrid[row][col]) {
                         guessGrid[row][col] = 0;
                         createGrid(guessGrid);
-                        // wrong.setCenter(225, 500);
-                        // wrong.setFillColor(Color.RED);
-                        // canvas.add(wrong);
                         canvas.remove(text);
-                        // lastWrong = true; 
                     } 
                 }
             }
         } 
         canvas.draw();
-    
     }
+
 
     public void updateGridWithGuess(int guess, int row, int col) {
         if (row >= 0 && col >= 0) {
@@ -161,10 +168,8 @@ public SudokuGame() {
             int y = row * BOX_DIM;
             GraphicsText guessText = new GraphicsText(String.valueOf(guess), x + BOX_DIM / 2, y + BOX_DIM / 2);
             guessText.setCenter(x + BOX_DIM / 2, y + BOX_DIM / 2);
-            // canvas.add(guessText);
             guessGrid[row][col] = guess; 
             createGrid(guessGrid);
-            // canvas.add(guessGrid);
             canvas.draw();
         } else {
             System.out.println("No cell selected.");
