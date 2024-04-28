@@ -36,6 +36,7 @@ public class Guess {
             int guess = Integer.parseInt(guessField.getText());
             if (guess >= 1 && guess <= 9) {
                 game.updateGridWithGuess(guess, game.getSelectedRow(), game.getSelectedCol());
+                game.gameWon();
             } else {
                 System.out.println("Invalid input. Please enter a number between 1 and 9.");
             }
@@ -43,4 +44,5 @@ public class Guess {
             System.out.println("Please enter a number.");
         }
     }
+    
 }

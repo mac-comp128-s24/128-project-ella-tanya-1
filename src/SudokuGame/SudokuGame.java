@@ -61,7 +61,6 @@ public SudokuGame() {
     canvas.setBackground(Color.WHITE);
 
     sudokuGame = new GraphicsText("Sudoku!"); 
-   // sudokuGame.setStrokeWidth(1.5); 
     sudokuGame.setFontSize(30);
     sudokuGame.setCenter(225, 500);
     sudokuGame.setFillColor(Color.decode("#6A0E3C"));
@@ -187,6 +186,28 @@ public SudokuGame() {
             System.out.println("No cell selected.");
         }
     }
+
+    public boolean checkAllGuessed(){
+        for(int i = 0; i < 9; i++){
+            for(int j = 0; j < 9; j++){
+                if(guessGrid[i][j]!=(correctGrid[i][j])){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void gameWon(){
+        if (checkAllGuessed()) {
+            canvas.removeAll();
+            GraphicsText win = new GraphicsText("YOU WIN!!", 175,225);
+            win.setFont("monospaced", FontStyle.BOLD_ITALIC, 24);
+            canvas.add(win);
+            canvas.draw();
+        }
+    }
+
     
     // Print initial 2D array in terminal
     public void printInitialGrid() {
