@@ -5,9 +5,13 @@ import edu.macalester.graphics.FontStyle;
 import edu.macalester.graphics.GraphicsText;
 import edu.macalester.graphics.Rectangle;
 import edu.macalester.graphics.ui.Button;
-
 import java.awt.Color;
 
+/**
+ * Main class that initializes and manages the Sudoku game interface.
+ * This class handles the creation of the game window, user interactions,
+ * and the display of the Sudoku grid.
+ */
 public class SudokuGame {
     private static final int CANVAS_WIDTH = 450;
     private static final int CANVAS_HEIGHT = 1000;
@@ -20,6 +24,7 @@ public class SudokuGame {
     private int selectedCol = -1; 
     private Guess guess; 
 
+    // Initial state of the Sudoku grid, showing zeros where user inputs are expected
     int[][] initialGrid = {
         {9, 6, 2, 7, 0, 0, 0, 5, 0},
         {7, 0, 0, 4, 5, 6, 0, 0, 9},
@@ -32,6 +37,7 @@ public class SudokuGame {
         {0, 5, 0, 1, 0, 4, 0, 2, 0}
     };
 
+    // Correct solutions for the Sudoku puzzle
     int[][] correctGrid = {
         {9, 6, 2, 7, 8, 3, 4, 5, 1},
         {7, 3, 1, 4, 5, 6, 2, 8, 9},
@@ -44,6 +50,7 @@ public class SudokuGame {
         {3, 5, 7, 1, 6, 4, 9, 2, 8}
     };
 
+     // Grid reflecting current user guesses
     public int[][] guessGrid = {
         {9, 6, 2, 7, 0, 0, 0, 5, 0},
         {7, 0, 0, 4, 5, 6, 0, 0, 9},
@@ -56,62 +63,65 @@ public class SudokuGame {
         {0, 5, 0, 1, 0, 4, 0, 2, 0}
     };
 
-public SudokuGame() {
-    canvas = new CanvasWindow("Sudoku!", CANVAS_WIDTH, CANVAS_HEIGHT);
-    canvas.setBackground(Color.WHITE);
+    /**
+     * Constructs the game window and initializes all components.
+     */
+    public SudokuGame() {
+        canvas = new CanvasWindow("Sudoku!", CANVAS_WIDTH, CANVAS_HEIGHT);
+        canvas.setBackground(Color.WHITE);
 
-    sudokuGame = new GraphicsText("Sudoku!"); 
-    sudokuGame.setFontSize(30);
-    sudokuGame.setCenter(225, 500);
-    sudokuGame.setFillColor(Color.decode("#6A0E3C"));
-    sudokuGame.setFont("monospaced", FontStyle.BOLD, 25);
-    sudokuGame.setFilled(true);
-    canvas.add(sudokuGame);
+        sudokuGame = new GraphicsText("Sudoku!"); 
+        sudokuGame.setFontSize(30);
+        sudokuGame.setCenter(225, 500);
+        sudokuGame.setFillColor(Color.decode("#6A0E3C"));
+        sudokuGame.setFont("monospaced", FontStyle.BOLD, 25);
+        sudokuGame.setFilled(true);
+        canvas.add(sudokuGame);
 
-    guess = new Guess(this);
-    canvas.add(guess.getGuessField());
-    canvas.add(guess.getSubmitGuessButton()); 
-
-    showAnswer = new Button("Show Answer"); 
-    showAnswer.setCenter(225, 600);
-    canvas.add(showAnswer);
-    showAnswer.onClick( () -> {
-        canvas.removeAll();
-        createBigGrid();
-        createGrid(correctGrid);
-        showAnswerOnGrid(correctGrid);
+        guess = new Guess(this);
         canvas.add(guess.getGuessField());
         canvas.add(guess.getSubmitGuessButton()); 
-        canvas.add(showAnswer);
-        canvas.add(hideAnswer);
-    });
 
-    hideAnswer = new Button("Hide Answer");
-    hideAnswer.setCenter(225, 650);
-    canvas.add(hideAnswer);
-    
-    hideAnswer.onClick( () ->  {
-        canvas.removeAll();
+        showAnswer = new Button("Show Answer"); 
+        showAnswer.setCenter(225, 600);
+        canvas.add(showAnswer);
+        showAnswer.onClick( () -> {
+            canvas.removeAll();
+            createBigGrid();
+            createGrid(correctGrid);
+            showAnswerOnGrid(correctGrid);
+            canvas.add(guess.getGuessField());
+            canvas.add(guess.getSubmitGuessButton()); 
+            canvas.add(showAnswer);
+            canvas.add(hideAnswer);
+        });
+
+        hideAnswer = new Button("Hide Answer");
+        hideAnswer.setCenter(225, 650);
+        canvas.add(hideAnswer);
+        
+        hideAnswer.onClick( () ->  {
+            canvas.removeAll();
+            createBigGrid();
+            createGrid(guessGrid);
+            canvas.add(guess.getGuessField());
+            canvas.add(guess.getSubmitGuessButton()); 
+            canvas.add(showAnswer);
+            canvas.add(hideAnswer);
+        });
+
+        canvas.onClick(event -> {
+            int x = (int) event.getPosition().getX();
+            int y = (int) event.getPosition().getY();
+            selectedCol = x / BOX_DIM;
+            selectedRow = y / BOX_DIM;
+            if (selectedRow >= 0 && selectedRow < 9 && selectedCol >= 0 && selectedCol < 9) {
+                System.out.println("Selected box at (" + selectedRow + "," + selectedCol + ")");
+            }
+        });
+
         createBigGrid();
         createGrid(guessGrid);
-         canvas.add(guess.getGuessField());
-         canvas.add(guess.getSubmitGuessButton()); 
-         canvas.add(showAnswer);
-         canvas.add(hideAnswer);
-    });
-
-    canvas.onClick(event -> {
-        int x = (int) event.getPosition().getX();
-        int y = (int) event.getPosition().getY();
-        selectedCol = x / BOX_DIM;
-        selectedRow = y / BOX_DIM;
-        if (selectedRow >= 0 && selectedRow < 9 && selectedCol >= 0 && selectedCol < 9) {
-            System.out.println("Selected box at (" + selectedRow + "," + selectedCol + ")");
-        }
-    });
-
-    createBigGrid();
-    createGrid(guessGrid);
 
     }
 
@@ -123,6 +133,9 @@ public SudokuGame() {
         return selectedCol; 
     }
 
+    /**
+     * Creates the large background grid that creates a visual separation of Sudoku sub-grids.
+     */
     public void createBigGrid() {
         for (int i = 0; i < 9; i++) {
             int row = i / 3; // Calculate row index
@@ -139,6 +152,10 @@ public SudokuGame() {
         }
     }
 
+    /**
+     * Creates the interactive grid for the Sudoku game where users can make guesses.
+     * @param grid the current state of the Sudoku grid to be displayed
+     */
     public void createGrid(int[][] grid) {
         for (int i = 0; i < 81; i++) {
             int row = i / 9; // Calculate row index
@@ -172,6 +189,13 @@ public SudokuGame() {
         canvas.draw();
     }
 
+    /**
+     * Updates the grid with a user's guess, replacing the existing number in the grid.
+     * 
+     * @param guess the user's guess to place in the grid
+     * @param row the row index where the guess is to be placed
+     * @param col the column index where the guess is to be placed
+     */
     public void updateGridWithGuess(int guess, int row, int col) {
         if (row >= 0 && col >= 0) {
             int x = col * BOX_DIM;
@@ -187,6 +211,10 @@ public SudokuGame() {
         }
     }
 
+    /**
+     * Checks if all cells in the guessGrid match the correctGrid, indicating the game is won.
+     * @return true if all guessed numbers match the solution
+     */
     public boolean checkAllGuessed(){
         for(int i = 0; i < 9; i++){
             for(int j = 0; j < 9; j++){
@@ -198,6 +226,9 @@ public SudokuGame() {
         return true;
     }
 
+     /**
+     * Displays the win message if the game is won after all cells are correctly guessed.
+     */
     public void gameWon(){
         if (checkAllGuessed()) {
             canvas.removeAll();
@@ -252,6 +283,10 @@ public SudokuGame() {
         canvas.draw();
     }
 
+    /**
+     * Run the application
+     * @param args
+     */
    public static void main(String[] args) {
     new SudokuGame();
    }
