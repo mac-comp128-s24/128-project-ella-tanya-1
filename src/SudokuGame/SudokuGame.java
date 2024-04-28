@@ -70,6 +70,7 @@ public class SudokuGame {
         canvas = new CanvasWindow("Sudoku!", CANVAS_WIDTH, CANVAS_HEIGHT);
         canvas.setBackground(Color.WHITE);
 
+        // Sudoku Text
         sudokuGame = new GraphicsText("Sudoku!"); 
         sudokuGame.setFontSize(30);
         sudokuGame.setCenter(225, 500);
@@ -78,13 +79,17 @@ public class SudokuGame {
         sudokuGame.setFilled(true);
         canvas.add(sudokuGame);
 
+        // Guess text field and submit guess button
         guess = new Guess(this);
         canvas.add(guess.getGuessField());
         canvas.add(guess.getSubmitGuessButton()); 
 
+        // Show answer button
         showAnswer = new Button("Show Answer"); 
         showAnswer.setCenter(225, 600);
         canvas.add(showAnswer);
+
+        // Show answer button functionality 
         showAnswer.onClick( () -> {
             canvas.removeAll();
             createBigGrid();
@@ -96,10 +101,12 @@ public class SudokuGame {
             canvas.add(hideAnswer);
         });
 
+        // Hide answer button
         hideAnswer = new Button("Hide Answer");
         hideAnswer.setCenter(225, 650);
         canvas.add(hideAnswer);
         
+        // Hide answer button funcionality 
         hideAnswer.onClick( () ->  {
             canvas.removeAll();
             createBigGrid();
@@ -110,6 +117,7 @@ public class SudokuGame {
             canvas.add(hideAnswer);
         });
 
+        // Event handler for clicking on boxes in the grid
         canvas.onClick(event -> {
             int x = (int) event.getPosition().getX();
             int y = (int) event.getPosition().getY();
@@ -125,10 +133,12 @@ public class SudokuGame {
 
     }
 
+    // Getter method for the row selected
     public int getSelectedRow() {
         return selectedRow; 
     }
 
+    // Getter method for the column selected
     public int getSelectedCol() {
         return selectedCol; 
     }
@@ -212,6 +222,30 @@ public class SudokuGame {
     }
 
     /**
+     * Displays the correct and complete Sudoku puzzle on the grid. 
+     * @param correctGrid the correct and complete grid
+     */
+    public void showAnswerOnGrid(int [][] correctGrid) {
+        for (int i = 0; i < 81; i++) {
+            int row = i / 9; // Calculate row index
+            int col = i % 9; // Calculate column index
+            int x = col * BOX_DIM;
+            int y = row * BOX_DIM;
+
+            Rectangle box = new Rectangle(x, y, BOX_DIM, BOX_DIM);
+            canvas.add(box);
+
+            int number = correctGrid[row][col];
+            if (number != 0 || number > 9) {  // If the number is not zero, display it
+                GraphicsText text = new GraphicsText(String.valueOf(number));
+                text.setCenter(x + BOX_DIM / 2, y + BOX_DIM / 2);
+                canvas.add(text);
+            }
+        } 
+        canvas.draw();
+    }
+
+    /**
      * Checks if all cells in the guessGrid match the correctGrid, indicating the game is won.
      * @return true if all guessed numbers match the solution
      */
@@ -225,6 +259,7 @@ public class SudokuGame {
         }
         return true;
     }
+
 
      /**
      * Displays the win message if the game is won after all cells are correctly guessed.
@@ -261,26 +296,6 @@ public class SudokuGame {
             }
             System.out.println(); // Moves to the next line after printing 9 numbers
         }
-    }
-
-    public void showAnswerOnGrid(int [][] correctGrid) {
-        for (int i = 0; i < 81; i++) {
-            int row = i / 9; // Calculate row index
-            int col = i % 9; // Calculate column index
-            int x = col * BOX_DIM;
-            int y = row * BOX_DIM;
-
-            Rectangle box = new Rectangle(x, y, BOX_DIM, BOX_DIM);
-            canvas.add(box);
-
-            int number = correctGrid[row][col];
-            if (number != 0 || number > 9) {  // If the number is not zero, display it
-                GraphicsText text = new GraphicsText(String.valueOf(number));
-                text.setCenter(x + BOX_DIM / 2, y + BOX_DIM / 2);
-                canvas.add(text);
-            }
-        } 
-        canvas.draw();
     }
 
     /**
