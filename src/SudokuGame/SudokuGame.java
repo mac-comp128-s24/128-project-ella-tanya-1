@@ -118,7 +118,7 @@ public class SudokuGame {
         {0, 7, 0, 0, 0, 0, 0, 9, 0}
     };
 
-    // Game 2: Correct solutions for the Sudoku puzzle
+    // Game 3: Correct solutions for the Sudoku puzzle
     int[][] correctGrid3 = {
         {9, 2, 6, 1, 7, 4, 5, 3, 8},
         {1, 3, 7, 2, 8, 5, 9, 6, 4},
@@ -131,7 +131,7 @@ public class SudokuGame {
         {5, 7, 1, 8, 4, 2, 3, 9, 6}
     };
 
-    // Game 2: Grid reflecting current user guesses
+    // Game 3: Grid reflecting current user guesses
     public int[][] guessGrid3 = {
         {9, 0, 0, 1, 0, 4, 5, 0, 0},
         {0, 0, 7, 0, 8, 0, 0, 6, 0},
