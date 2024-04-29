@@ -182,6 +182,7 @@ public class SudokuGame {
         // 'Show Answer' button event handler 
         showAnswer.onClick( () -> {
             canvas.removeAll();
+            canvas.add(sudokuGame);
             createBigGrid();
             createGrid(grid.getCorrectGrid());
             showAnswerOnGrid(grid.getCorrectGrid());
@@ -199,6 +200,7 @@ public class SudokuGame {
         // 'Hide Answer' button event handler  
         hideAnswer.onClick( () ->  {
             canvas.removeAll();
+            canvas.add(sudokuGame);
             createBigGrid();
             createGrid(grid.getGuessGrid());
             canvas.add(guess.getGuessField());
